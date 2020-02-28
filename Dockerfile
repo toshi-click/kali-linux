@@ -49,12 +49,10 @@ RUN { \
     echo 'echo "logfile /var/log/msmtp.log"'; \
     echo '} >> /etc/msmtprc'; \
     echo 'chmod 0644 /etc/msmtprc'; \
-    echo 'apache2-foreground'; \
     } > /usr/local/bin/run.sh; \
     chmod +x /usr/local/bin/run.sh;
 
-RUN echo 'sendmail_path = "/usr/bin/msmtp -t"' > /usr/local/etc/php/conf.d/mail.ini \
-    && touch /var/log/msmtp.log \
+RUN touch /var/log/msmtp.log \
     && touch /root/.msmtprc \
     && chmod 0777 /var/log/msmtp.log
 
@@ -74,3 +72,4 @@ RUN apt update \
     zlib1g-dev
     
 RUN gem install wpscan
+CMD ["/usr/local/bin/run.sh"]
