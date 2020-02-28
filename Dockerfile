@@ -59,41 +59,28 @@ RUN touch /var/log/msmtp.log \
 # WPScan
 RUN apt update \
     && apt upgrade -y \
-    && apt install -y \
-    vim \
-    nmap \
-    ruby \
-    build-essential \
-    libcurl4-openssl-dev \
-    libxml2 \
-    libxml2-dev \
-    libxslt1-dev \
-    ruby-dev \
-    libgmp-dev \
-    zlib1g-dev \
+    && apt install -y wpscan \
     && apt -y clean \
     && rm -rf /var/lib/apt/lists/*
-RUN gem install wpscan
 
 # golismero
+# セキュリティテストのためのフレームワークです。Import、Recon（偵察）、Scan、Attack、Report、UIに関する機能がプラグインとして組み込まれており、独自プラグインを実装して組み込むこともできます。
+# golismero scan https://example.com -e nikto -o report.html
 RUN apt update \
     && apt upgrade -y \
     && apt install -y \
-    python2.7 \
-    python2.7-dev \
-    python-pip \
-    python-docutils \
-    git \
-    perl \
-    nmap \
-    sslscan \
+    golismero \
     && apt -y clean \
     && rm -rf /var/lib/apt/lists/*
-WORKDIR /opt
-RUN git clone https://github.com/golismero/golismero.git
-WORKDIR /opt/golismero
-RUN pip install -r requirements.txt \
-  && pip install -r requirements_unix.txt \
-  && ln -s /opt/golismero/golismero.py /usr/bin/golismero
+
+# skipfish
+# Webアプリケーションのセキュリティチェックを行います。クローリングと辞書を使った探索を組み合わせてサイトにアクセスし、セキュリティチェックを行った結果をレポートに出力します。
+# skipfish -o result http://localhost/
+RUN apt update \
+    && apt upgrade -y \
+    && apt install -y \
+    skipfish \
+    && apt -y clean \
+    && rm -rf /var/lib/apt/lists/*
 
 CMD ["/usr/local/bin/run.sh"]
