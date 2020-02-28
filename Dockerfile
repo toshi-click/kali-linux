@@ -59,9 +59,10 @@ RUN touch /var/log/msmtp.log \
 # WPScan
 RUN apt update \
     && apt upgrade -y \
-    && apt install -y wpscan \
+    && apt install -y vim nmap ruby build-essential libcurl4-openssl-dev libxml2 libxml2-dev libxslt1-dev ruby-dev libgmp-dev zlib1g-dev \
     && apt -y clean \
     && rm -rf /var/lib/apt/lists/*
+RUN gem install wpscan
 
 # golismero
 # セキュリティテストのためのフレームワークです。Import、Recon（偵察）、Scan、Attack、Report、UIに関する機能がプラグインとして組み込まれており、独自プラグインを実装して組み込むこともできます。
