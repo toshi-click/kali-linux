@@ -56,6 +56,7 @@ RUN touch /var/log/msmtp.log \
     && touch /root/.msmtprc \
     && chmod 0777 /var/log/msmtp.log
 
+# WPScan
 RUN apt update \
     && apt upgrade -y \
     && apt install -y \
@@ -69,7 +70,30 @@ RUN apt update \
     libxslt1-dev \
     ruby-dev \
     libgmp-dev \
-    zlib1g-dev
-    
+    zlib1g-dev \
+    && apt -y clean \
+    && rm -rf /var/lib/apt/lists/*
 RUN gem install wpscan
+
+# golismero
+RUN apt update \
+    && apt upgrade -y \
+    && apt install -y \
+    python2.7 \
+    python2.7-dev \
+    python-pip \
+    python-docutils \
+    git \
+    perl \
+    nmap \
+    sslscan \
+    && apt -y clean \
+    && rm -rf /var/lib/apt/lists/*
+WORKDIR /opt
+RUN git clone https://github.com/golismero/golismero.git
+WORKDIR /opt/golismero
+RUN pip install -r requirements.txt \
+  && pip install -r requirements_unix.txt \
+  && ln -s /opt/golismero/golismero.py /usr/bin/golismero
+
 CMD ["/usr/local/bin/run.sh"]
